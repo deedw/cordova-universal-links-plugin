@@ -94,9 +94,16 @@ function defaultEntitlementsFile() {
  */
 function injectPreferences(currentEntitlements, pluginPreferences) {
   var newEntitlements = currentEntitlements;
+
+  // remove any existing applinks (leaving webcredentials)
+  var oldContent = newEntitlements[ASSOCIATED_DOMAINS] || [];
+  var newContent = oldContent.filter(function (item) { return !(/^applinks/.test(item)); });
+
   var content = generateAssociatedDomainsContent(pluginPreferences);
 
-  newEntitlements[ASSOCIATED_DOMAINS] = content;
+  newContent = newContent.concat(content);
+
+  newEntitlements[ASSOCIATED_DOMAINS] = newContent;
 
   return newEntitlements;
 }
